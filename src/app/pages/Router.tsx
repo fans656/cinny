@@ -80,7 +80,14 @@ export const createRouter = (clientConfig: ClientConfig, screenSize: ScreenSize)
       <Route
         index
         loader={() => {
-          if (getFallbackSession()) return redirect(getHomePath());
+          if (getFallbackSession()) {
+            const lastActivePath = localStorage.getItem('lastActivePath');
+            if (lastActivePath) {
+              localStorage.removeItem('lastActivePath');
+              return redirect(lastActivePath);
+            }
+            return redirect(getHomePath());
+          }
           const afterLoginPath = getAppPathFromHref(getOriginBaseUrl(), window.location.href);
           if (afterLoginPath) setAfterLoginRedirectPath(afterLoginPath);
           return redirect(getLoginPath());

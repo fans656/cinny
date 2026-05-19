@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 import React, { ReactNode, useCallback, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { RoomEvent, RoomEventHandlerMap } from 'matrix-js-sdk';
 import { roomToUnreadAtom, unreadEqual, unreadInfoToUnread } from '../../state/room/roomToUnread';
 import LogoSVG from '../../../../public/res/svg/cinny.svg';
@@ -253,6 +253,18 @@ function MessageNotifications() {
   );
 }
 
+function LastActivePathTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    const path = location.pathname + location.search;
+    // Only save paths that contain a room ID (starts with '!' or '#')
+    if (/[/][!#]/.test(path)) {
+      localStorage.setItem('lastActivePath', path);
+    }
+  }, [location]);
+  return null;
+}
+
 type ClientNonUIFeaturesProps = {
   children: ReactNode;
 };
@@ -263,6 +275,7 @@ export function ClientNonUIFeatures({ children }: ClientNonUIFeaturesProps) {
       <SystemEmojiFeature />
       <PageZoomFeature />
       <FaviconUpdater />
+      <LastActivePathTracker />
       <InviteNotifications />
       <MessageNotifications />
       {children}
