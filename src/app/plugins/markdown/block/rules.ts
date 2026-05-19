@@ -57,7 +57,7 @@ const LIST_ITEM_REG = /^( *)([-*]|[\da-zA-Z]\.) +(.+)$/;
 type ListType = 'ol' | 'ul';
 
 function getListType(marker: string): ListType {
-  return marker === '*' ? 'ul' : 'ol';
+  return (marker === '*' || marker === '-') ? 'ul' : 'ol';
 }
 
 function getOrderedMeta(marker: string) {
