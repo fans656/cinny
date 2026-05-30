@@ -36,6 +36,7 @@ import {
   Chip,
   ContainerColor,
   Icon,
+  IconButton,
   Icons,
   Line,
   Scroll,
@@ -1827,16 +1828,20 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
         </Box>
       </Scroll>
       {!nearBottom && (
-        <TimelineFloat position="Bottom">
-          <Chip
+        <TimelineFloat
+          position="Bottom"
+          style={{ left: toRem(16), transform: 'none' }}
+        >
+          <IconButton
+            size="400"
             variant="SurfaceVariant"
-            radii="Pill"
             outlined
-            before={<Icon size="50" src={Icons.ArrowBottom} />}
+            radii="300"
             onClick={handleJumpToLatest}
+            aria-label="Jump to Latest"
           >
-            <Text size="L400">Jump to Latest</Text>
-          </Chip>
+            <Icon size="300" src={Icons.ArrowBottom} />
+          </IconButton>
         </TimelineFloat>
       )}
     </Box>
