@@ -512,6 +512,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
       }
     | undefined
   >();
+  const [nearBottom, setNearBottom] = useState(true);
   const alive = useAlive();
 
   const linkifyOpts = useMemo<LinkifyOpts>(
@@ -892,6 +893,14 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
   const handleMarkAsRead = () => {
     markAsRead(mx, room.roomId, hideActivity);
   };
+
+  const handleScroll = useCallback(
+    (evt: React.UIEvent<HTMLDivElement>) => {
+      const el = evt.currentTarget;
+      setNearBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 200);
+    },
+    []
+  );
 
   const handleOpenReply: MouseEventHandler = useCallback(
     async (evt) => {
@@ -1730,7 +1739,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
           </Chip>
         </TimelineFloat>
       )}
-      <Scroll ref={scrollRef} visibility="Hover">
+      <Scroll ref={scrollRef} onScroll={handleScroll} visibility="Hover">
         <Box
           direction="Column"
           justifyContent="End"
@@ -1817,7 +1826,7 @@ export function RoomTimeline({ room, eventId, roomInputRef, editor }: RoomTimeli
           <span ref={atBottomAnchorRef} />
         </Box>
       </Scroll>
-      {!atBottom && (
+      {!nearBottom && (
         <TimelineFloat position="Bottom">
           <Chip
             variant="SurfaceVariant"
