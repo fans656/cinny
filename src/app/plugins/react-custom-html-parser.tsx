@@ -4,7 +4,6 @@ import React, {
   ReactEventHandler,
   Suspense,
   lazy,
-  useMemo,
   useState,
 } from 'react';
 import {
@@ -16,7 +15,7 @@ import {
 } from 'html-react-parser';
 import { MatrixClient } from 'matrix-js-sdk';
 import classNames from 'classnames';
-import { Box, Chip, config, Header, Icon, IconButton, Icons, Scroll, Text, toRem } from 'folds';
+import { Box, Chip, Header, Icon, IconButton, Icons, Scroll, Text } from 'folds';
 import { IntermediateRepresentation, Opts as LinkifyOpts, OptFn } from 'linkifyjs';
 import Linkify from 'linkify-react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -240,12 +239,6 @@ export function CodeBlock({
       ? languageClass.replace('language-', '')
       : languageClass;
 
-  const LINE_LIMIT = 14;
-  const largeCodeBlock = useMemo(
-    () => extractTextFromChildren(children).split('\n').length > LINE_LIMIT,
-    [children]
-  );
-
   const [expanded, setExpand] = useState(false);
   const [copied, setCopied] = useTimeoutToggle();
 
@@ -259,7 +252,7 @@ export function CodeBlock({
   };
 
   return (
-    <Text size="T300" as="pre" className={css.CodeBlock}>
+    <Text size="T300" as="pre" className={css.CodeBlock} style={expanded ? { maxHeight: 'none' } : undefined}>
       <Header variant="Surface" size="400" className={css.CodeBlockHeader}>
         <Box grow="Yes">
           <Text size="L400" truncate>
@@ -276,25 +269,19 @@ export function CodeBlock({
           >
             <Text size="B300">{copied ? 'Copied' : 'Copy'}</Text>
           </Chip>
-          {largeCodeBlock && (
-            <IconButton
-              size="300"
-              variant="SurfaceVariant"
-              outlined
-              radii="300"
-              onClick={toggleExpand}
-              aria-label={expanded ? 'Collapse' : 'Expand'}
-            >
-              <Icon size="50" src={expanded ? Icons.ChevronTop : Icons.ChevronBottom} />
-            </IconButton>
-          )}
+          <IconButton
+            size="300"
+            variant="SurfaceVariant"
+            outlined
+            radii="300"
+            onClick={toggleExpand}
+            aria-label={expanded ? 'Collapse' : 'Expand'}
+          >
+            <Icon size="50" src={expanded ? Icons.ChevronTop : Icons.ChevronBottom} />
+          </IconButton>
         </Box>
       </Header>
       <Scroll
-        style={{
-          maxHeight: largeCodeBlock && !expanded ? toRem(300) : undefined,
-          paddingBottom: largeCodeBlock ? config.space.S400 : undefined,
-        }}
         direction="Both"
         variant="SurfaceVariant"
         size="300"
@@ -305,7 +292,6 @@ export function CodeBlock({
           {domToReact(children, opts)}
         </div>
       </Scroll>
-      {largeCodeBlock && !expanded && <Box className={css.CodeBlockBottomShadow} />}
     </Text>
   );
 }

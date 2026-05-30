@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, globalStyle } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { color, config, DefaultReset, toRem } from 'folds';
 import { ContainerColor } from './ContainerColor.css';
@@ -48,7 +48,7 @@ const BaseCode = style({
   borderRadius: config.radii.R300,
 });
 const CodeFont = style({
-  fontFamily: 'monospace',
+  fontFamily: "Consolas, 'Courier New', monospace",
 });
 
 export const Code = style([
@@ -90,7 +90,8 @@ export const CodeBlock = style([
   {
     fontStyle: 'normal',
     position: 'relative',
-    overflow: 'hidden',
+    overflowY: 'auto',
+    maxHeight: toRem(400),
   },
 ]);
 export const CodeBlockHeader = style([
@@ -106,8 +107,17 @@ export const CodeBlockInternal = style([
   {
     padding: `${config.space.S200} ${config.space.S200} 0`,
     minWidth: toRem(200),
+    fontSize: toRem(12),
+    lineHeight: 1.4,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
   },
 ]);
+
+globalStyle(`${CodeBlockInternal} code`, {
+  fontFamily: 'inherit',
+  fontSize: 'inherit',
+});
 
 export const CodeBlockBottomShadow = style({
   position: 'absolute',
