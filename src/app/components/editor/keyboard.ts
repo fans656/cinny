@@ -18,7 +18,7 @@ export const BLOCK_HOTKEYS: Record<string, BlockType> = {
   'mod+7': BlockType.OrderedList,
   'mod+8': BlockType.UnorderedList,
   "mod+'": BlockType.BlockQuote,
-  'mod+;': BlockType.CodeBlock,
+
 };
 const BLOCK_KEYS = Object.keys(BLOCK_HOTKEYS);
 

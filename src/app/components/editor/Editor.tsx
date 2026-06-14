@@ -100,8 +100,8 @@ export const CustomEditor = forwardRef<HTMLDivElement, CustomEditorProps>(
     const handleKeydown: KeyboardEventHandler = useCallback(
       (evt) => {
         onKeyDown?.(evt);
-        const shortcutToggled = toggleKeyboardShortcut(editor, evt);
-        if (shortcutToggled) evt.preventDefault();
+        // const shortcutToggled = toggleKeyboardShortcut(editor, evt);
+        // if (shortcutToggled) evt.preventDefault();
       },
       [editor, onKeyDown]
     );
